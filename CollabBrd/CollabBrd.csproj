@@ -285,9 +285,15 @@
     <Content Include="app\projects\scenes\scene.html" />
     <Content Include="app\projects\scenes\scene.js" />
     <Content Include="app\projects\scenes\sceneDetail.js" />
+    <Content Include="app\services\authInterceptor.js" />
     <Content Include="app\services\datacontext.js" />
     <Content Include="app\services\directives.js" />
     <Content Include="app\services\entityManagerFactory.js" />
+    <Content Include="app\services\model.js" />
+    <Content Include="app\services\repositories\repositories.js" />
+    <Content Include="app\services\repositories\repository.abstract.js" />
+    <Content Include="app\services\repositories\repository.project.js" />
+    <Content Include="app\services\repositories\repository.scene.js" />
     <Content Include="app\start\landingPage.html" />
     <Content Include="app\start\landingPage.js" />
     <Content Include="Areas\HelpPage\HelpPage.css" />

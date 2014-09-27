@@ -7,51 +7,77 @@
         .module('app')
         .controller(controllerId, projects);
 
-    projects.$inject = ['$location', 'common', 'datacontext'];
+    projects.$inject = ['$location', '$scope', 'common', 'datacontext'];
 
     var app = angular.module('app');
 
-    function projects($location, common, datacontext) {
+    function projects($location, $scope, common, datacontext) {
 
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = getLogFn(controllerId, 'success');
-        var default_project = {
-            Selected: false,
-            Id: -1,
-            Name: '',
-            CreateDate: moment().toDate(),
-            ModifyDate: moment().toDate()
-        };
+
+        //var default_project = {
+        //    Selected: false,
+        //    Id: -1,
+        //    Name: '',
+        //    CreateDate: moment().toDate(),
+        //    ModifyDate: moment().toDate()
+        //};
 
         var vm = this;
         vm.title = 'My Projects';
         vm.projects = [];
         vm.selectedProjects = [];
         vm.editedProject = null;
-        app.title = vm.title;
+        vm.isSaving = false;
 
         vm.openNewProjectModal = function () {
             common.dialog.open({
                 template: 'add-dialog',
                 controller: ['$scope', function ($scope) {
-                    $scope.vm = { Name: '' };
+                    $scope.vm = datacontext.project.create();
+
+                    Object.defineProperty($scope.vm, 'canSave', {
+                        get: function () {
+                            return !vm.isSaving;
+                        }
+                    });
                 }]
             })
             .closePromise.then(function (data) {
                 var projectData = data.value;
                 if (projectData != null) {
-                    projectData = $.extend({}, default_project, projectData);
-
-                    vm.createProject(projectData);
+                    projectData.CreateDateFormatted = moment();
+                    projectData.OwnerId = 'daf9a059-5a07-46f1-bd9c-4d9b56431fc2';
+                    vm.saveProject(projectData);
+                }
+                else {
+                    datacontext.cancel();
                 }
             });
         }
 
-        vm.createProject = function (project) {
+        function onDestroy() {
+            $scope.$on('$destroy', function () {
+                datacontext.cancel();
+            })
+        }
+
+        vm.saveProject = function (project) {
             if (project != null) {
-                logSuccess(project.Name + ' created successfully.');
-                vm.projects.push(project);
+                project.ModifyDateFormatted = moment();
+                vm.isSaving = true;
+
+                return datacontext.save().then(function (saveResult) {
+                    vm.isSaving = false;
+                    logSuccess(project.Name + ' created successfully.');
+
+                }, function (error) {
+                    vm.isSaving = false;
+                });
+
+                //vm.projects.push(project);
             }
         }
 
@@ -59,27 +85,30 @@
             common.dialog.open({
                 template: 'edit-dialog',
                 controller: ['$scope', function ($scope) {
-                    $scope.vm = $.extend(true, {}, project); //deep clone the selected project
+                    $scope.vm = project //deep clone the selected project
                     vm.editedProject = project;
                 }]
             })
              .closePromise.then(function (data) {
                  var projectData = data.value;
                  if (projectData != null) {
-                     projectData = $.extend({}, default_project, projectData);
-
-                     vm.editProject(projectData);
+                     //projectData = $.extend({}, default_project, projectData);
+                     //vm.editProject(projectData);
+                     vm.saveProject(projectData);
+                 }
+                 else {
+                     datacontext.cancel();
                  }
              });
         }
 
-        vm.editProject = function (project) {
-            if (project != null) {
-                vm.projects[vm.projects.indexOf(vm.editedProject)] = project;
-                vm.editedProject = null;
-                logSuccess(project.Name + ' edited successfully.');
-            }
-        }
+        //vm.editProject = function (project) {
+        //    if (project != null) {
+        //        vm.projects[vm.projects.indexOf(vm.editedProject)] = project;
+        //        vm.editedProject = null;
+        //        logSuccess(project.Name + ' edited successfully.');
+        //    }
+        //}
 
         vm.openDeleteProjectModal = function () {
             common.dialog.open({
@@ -117,13 +146,14 @@
         activate();
 
         function activate() {
+            onDestroy();
             common.activateController([getProjects()], controllerId)
                 .then(function () { log('Activated Projects View'); });
         }
 
         function getProjects() {
-            return datacontext.projects.getProjects().then(function (data) {
-                var results = data.results;
+            return datacontext.project.getPartials().then(function (data) {
+                var results = data;
                 common.utils.addProperty(results, { key: 'Selected', value: false });
                 return vm.projects = results;
             });

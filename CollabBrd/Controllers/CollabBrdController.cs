@@ -12,6 +12,7 @@ using System.Web.Http;
 namespace CollabBrd.Controllers
 {
     [BreezeController]
+    //[Authorize]
     public class CollabBrdController : ApiController
     {
         CollabBrdRepository _repository = new CollabBrdRepository();
@@ -32,6 +33,29 @@ namespace CollabBrd.Controllers
         public IQueryable<Scene> Scenes()
         {
             return _repository.Scenes;
+        }
+
+        [HttpGet]
+        public Profile User()
+        {
+            return _repository.GetUserProfile();
+        }
+
+        [HttpGet]
+        public IQueryable<Project> UserProjects()
+        {
+            return _repository.GetUserProjects();
+        }
+
+        [HttpGet]
+        public IQueryable<Scene> UserScenes([FromUri] int id)
+        {
+            var project = _repository.GetUserProjects().FirstOrDefault(p => p.Id == id);
+            if (project != null)
+            {
+                return project.Scenes.AsQueryable();
+            }
+            throw new Exception(String.Format("No Project with Id = {0} exists.", id));
         }
 
         [HttpPost]

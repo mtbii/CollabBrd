@@ -1,4 +1,4 @@
-﻿<section class="mainbar" data-ng-controller="projectDetail as vm">
+﻿<section class="mainbar" data-ng-controller="sceneDetail as vm">
     <section class="matter">
         <div class="container">
             <div class="row">
@@ -6,38 +6,12 @@
                     <div data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content user">
                         <div>
-                            <table class="table table-bordered table-responsive table-hover">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>
-                                            Name
-                                        </th>
-                                        <th>
-                                            Created
-                                        </th>
-                                        <th>
-                                            Modified
-                                        </th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr ng-repeat="scene in vm.scenes">
-                                        <td><input type="checkbox" ng-model="scene.Selected" ng-click="vm.changeSelected(scene)" /></td>
-                                        <td><a href="#/projects/{{vm.projectId}}/scenes/{{scene.Id}}">{{scene.Name}}</a></td>
-                                        <td>{{scene.CreateDate | date: 'short'}}</td>
-                                        <td>{{scene.ModifyDate | date: 'short'}}</td>
-                                        <td>
-                                            <button class="btn btn-default" ng-click="vm.openEditProjectModal(scene)">Edit</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <br />
-                        <div>
-                            <button class="btn btn-danger" ng-click="vm.openDeleteProjectModal()" ng-disabled="vm.selectedProjects.length == 0">Delete</button>
+                            <form ng-model="vm.scene">
+                                Name: {{Name}} <br /><br />
+                                Created On: {{CreateDate | date: 'short'}}<br /><br />
+                                Modified On: {{ModifyDate | date: 'short'}}<br /><br />
+                                <br />
+                            </form>
                         </div>
                     </div>
                     <div class="widget-foot">
@@ -55,32 +29,4 @@
         <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(true)">Yes</button>
         <button class="btn btn-lg btn-default" ng-click="closeThisDialog(false)">No</button>
     </div>
-</script>
-
-<script type="text/ng-template" id="add-dialog">
-    <h4>Create New Project</h4>
-    <form class="form">
-        <div class="form-group">
-            <h5>Name: </h5>
-            <input class="form-control" type="text" ng-model="vm.Name" required />
-        </div>
-        <div class="form-group">
-            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)">OK</button>
-            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)">Cancel</button>
-        </div>
-    </form>
-</script>
-
-<script type="text/ng-template" id="edit-dialog">
-    <h4>Edit Project</h4>
-    <form class="form">
-        <div class="form-group">
-            <h5>Name: </h5>
-            <input class="form-control" type="text" ng-model="vm.Name" required />
-        </div>
-        <div class="form-group">
-            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)">OK</button>
-            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)">Cancel</button>
-        </div>
-    </form>
 </script>

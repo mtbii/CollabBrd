@@ -16,22 +16,23 @@
         var logSuccess = getLogFn(controllerId, 'success');
 
         var vm = this;
-        vm.title = 'Project Detail';
+        vm.title = 'Scene Detail';
+        vm.sceneId = $routeParams.sceneId;
         vm.projectId = $routeParams.projectId;
-        vm.scenes = [];
+        vm.scene;
 
         activate();
 
         function activate() {
-            common.activateController([getScenes()], controllerId)
+            common.activateController([getScene()], controllerId)
                 .then(function () { log('Activated Project Detail View'); });
         }
 
-        function getScenes() {
-            return datacontext.scenes.getScenes(vm.projectId).then(function (data) {
-                var results = data.results;
+        function getScene() {
+            return datacontext.scene.getById(vm.sceneId).then(function (data) {
+                var results = data;
                 common.utils.addProperty(results, { key: 'Selected', value: false });
-                return vm.scenes = results;
+                return vm.scene = results;
             });
         }
     }

@@ -5,9 +5,9 @@
         .module('app')
         .factory('account', account);
 
-    account.$inject = ['$http', 'dialog', 'logger', '$q', 'authentication'];
+    account.$inject = ['dialog', 'logger', '$q', 'authentication'];
 
-    function account($http, dialog, logger, $q, auth) {
+    function account(dialog, logger, $q, auth) {
 
         var logError = logger.getLogFn('account', 'error');
 

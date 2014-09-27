@@ -29,7 +29,8 @@
                                         <td>{{scene.CreateDate | date: 'short'}}</td>
                                         <td>{{scene.ModifyDate | date: 'short'}}</td>
                                         <td>
-                                            <button class="btn btn-default" ng-click="vm.openEditProjectModal(scene)">Edit</button>
+                                            <a class="btn btn-success" href="#/projects/{{vm.projectId}}/scenes/{{scene.Id}}/design">Edit</a>
+                                            <button class="btn btn-default" ng-click="vm.openEditProjectModal(scene)">Rename</button>
                                         </td>
                                     </tr>
                                 </tbody>

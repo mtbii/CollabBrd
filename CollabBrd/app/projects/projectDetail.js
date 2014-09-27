@@ -28,7 +28,7 @@
         }
 
         function getScenes() {
-            return datacontext.scenes.getScenes(vm.projectId).then(function (data) {
+            return datacontext.project.getById(vm.projectId).then(function (data) {
                 var results = data.results;
                 common.utils.addProperty(results, { key: 'Selected', value: false });
                 return vm.scenes = results;

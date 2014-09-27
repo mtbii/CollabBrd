@@ -19,18 +19,20 @@
         'breeze.directives' // contains the breeze validation directive (zValidate)
     ]);
 
-    app.config(['ngDialogProvider', function (ngDialogProvider) {
+    app.config(['ngDialogProvider', '$httpProvider', function (ngDialogProvider, $httpProvider) {
         ngDialogProvider.setDefaults({
             className: 'ngdialog-theme-default',
             showClose: true,
             closeByDocument: true,
             closeByEscape: true
         });
+
+        $httpProvider.interceptors.push('authInterceptor');
     }]);
 
     // Handle routing errors and success events
-    app.run(['$route', function ($route) {
+    app.run(['$route', '$rootScope', '$q', function ($route, $rootScope, $q) {
         // Include $route to kick start the router.
-
+        //breeze.config.extendQ($rootScope, $q);
     }]);
 })();

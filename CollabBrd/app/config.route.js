@@ -26,6 +26,7 @@
                     return deferred.promise;
                 }
                 else { // fire $routeChangeError
+                    auth.fillAuthData();
                     if (auth.authentication.isAuth) {
                         deferred.resolve();
                         return deferred.promise;
@@ -92,7 +93,7 @@
                 url: '/projects/:projectId',
                 authentication: true,
                 config: {
-                    templateUrl: 'app/projects/project-detail.html',
+                    templateUrl: '/app/projects/project-detail.html',
                     title: 'project-detail'
                 }
             },
@@ -100,7 +101,7 @@
                 url: '/projects/:projectId/scenes/:sceneId',
                 authentication: true,
                 config: {
-                    templateUrl: 'app/projects/scenes/scene-detail.html',
+                    templateUrl: '/app/projects/scenes/scene-detail.html',
                     title: 'scene-detail'
                 }
             },
@@ -108,7 +109,7 @@
                 url: '/projects/:projectId/scenes/:sceneId/design',
                 authentication: true,
                 config: {
-                    templateUrl: 'app/projects/scenes/scene.html',
+                    templateUrl: '/app/projects/scenes/scene.html',
                     title: 'scene-design'
                 }
             },

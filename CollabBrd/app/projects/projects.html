@@ -68,8 +68,8 @@
             <input class="form-control" type="text" ng-model="vm.Name" required />
         </div>
         <div class="form-group">
-            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)">OK</button>
-            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)">Cancel</button>
+            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)" ng-disabled="!vm.canSave">OK</button>
+            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)" ng-disabled="!vm.canSave">Cancel</button>
         </div>
     </form>
 </script>
@@ -82,8 +82,8 @@
             <input class="form-control" type="text" ng-model="vm.Name" required />
         </div>
         <div class="form-group">
-            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)">OK</button>
-            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)">Cancel</button>
+            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)" ng-disabled="!vm.canSave">OK</button>
+            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)" ng-disabled="!vm.canSave">Cancel</button>
         </div>
     </form>
 </script>

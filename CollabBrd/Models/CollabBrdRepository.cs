@@ -40,12 +40,23 @@ namespace CollabBrd.Models
         public IQueryable<Project> GetUserProjects()
         {
             string id = HttpContext.Current.User.Identity.GetUserId();
+
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new Exception("No user is logged in");
+            }
             return Context.Projects.Where(p => p.OwnerId == id);
         }
 
         public IQueryable<Profile> Profiles
         {
             get { return Context.Users.Select(u => Profile.FromApplicationUser(u)); }
+        }
+
+        public Profile GetUserProfile()
+        {
+            string id = HttpContext.Current.User.Identity.GetUserId();
+            return Profiles.FirstOrDefault(p => p.Id == id);
         }
     }
 }

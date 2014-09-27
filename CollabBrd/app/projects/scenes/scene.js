@@ -7,125 +7,31 @@
         .module('app')
         .controller(controllerId, scene);
 
-    scene.$inject = ['$location', 'common', 'datacontext'];
+    scene.$inject = ['$location', '$routeParams', 'common', 'datacontext'];
 
     var app = angular.module('app');
 
-    function scene($location, common, datacontext) {
+    function scene($location, $routeParams, common, datacontext) {
 
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logSuccess = getLogFn(controllerId, 'success');
-        var default_project = {
-            Selected: false,
-            Id: -1,
-            Name: '',
-            CreateDate: moment().toDate(),
-            ModifyDate: moment().toDate()
-        };
 
         var vm = this;
-        vm.title = 'My Projects';
-        vm.projects = [];
-        vm.selectedProjects = [];
-        vm.editedProject = null;
-        app.title = vm.title;
-
-        vm.openNewProjectModal = function () {
-            common.dialog.open({
-                template: 'add-dialog',
-                controller: ['$scope', function ($scope) {
-                    $scope.vm = { Name: '' };
-                }]
-            })
-            .closePromise.then(function (data) {
-                var projectData = data.value;
-                if (projectData != null) {
-                    projectData = $.extend({}, default_project, projectData);
-
-                    vm.createProject(projectData);
-                }
-            });
-        }
-
-        vm.createProject = function (project) {
-            if (project != null) {
-                logSuccess(project.Name + ' created successfully.');
-                vm.projects.push(project);
-            }
-        }
-
-        vm.openEditProjectModal = function (project) {
-            common.dialog.open({
-                template: 'edit-dialog',
-                controller: ['$scope', function ($scope) {
-                    $scope.vm = $.extend(true, {}, project); //deep clone the selected project
-                    vm.editedProject = project;
-                }]
-            })
-             .closePromise.then(function (data) {
-                 var projectData = data.value;
-                 if (projectData != null) {
-                     projectData = $.extend({}, default_project, projectData);
-
-                     vm.editProject(projectData);
-                 }
-             });
-        }
-
-        vm.editProject = function (project) {
-            if (project != null) {
-                vm.projects[vm.projects.indexOf(vm.editedProject)] = project;
-                vm.editedProject = null;
-                logSuccess(project.Name + ' edited successfully.');
-            }
-        }
-
-        vm.openDeleteProjectModal = function () {
-            common.dialog.open({
-                template: 'confirm-delete-dialog',
-                controller: ['$scope', function ($scope) {
-                    $scope.vm = vm.selectedProjects;
-                }]
-            })
-                .closePromise.then(function (data) {
-                    if (data.value === true) {
-                        vm.deleteProjects();
-                    }
-                });
-        }
-
-        vm.deleteProjects = function () {
-
-            for (var i = 0; i < vm.selectedProjects.length; i++) {
-                vm.projects.splice(vm.projects.indexOf(vm.selectedProjects[i]), 1);
-            }
-
-            logSuccess(vm.selectedProjects.length + ' project(s) deleted.');
-            vm.selectedProjects = [];
-        }
-
-        vm.changeSelected = function (project) {
-            if (!project.Selected) {
-                vm.selectedProjects.push(project);
-            }
-            else {
-                vm.selectedProjects.splice(vm.selectedProjects.indexOf(project), 1);
-            }
-        }
+        vm.sceneId = $routeParams.sceneId;
+        vm.scene = null;
 
         activate();
 
         function activate() {
-            common.activateController([getProjects()], controllerId)
+            common.activateController([getScenes()], controllerId)
                 .then(function () { log('Activated Scene View'); });
         }
 
-        function getProjects() {
-            return datacontext.projects.getProjects().then(function (data) {
-                var results = data.results;
-                common.utils.addProperty(results, { key: 'Selected', value: false });
-                return vm.projects = results;
+        function getScenes() {
+            return datacontext.scene.getById(vm.sceneId).then(function (data) {
+                var results = data;
+                return vm.scene = results;
             });
         }
     }
