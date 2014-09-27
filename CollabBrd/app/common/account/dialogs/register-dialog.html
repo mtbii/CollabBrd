@@ -1,0 +1,24 @@
+﻿<div class="widget wblue borderless-ngDialog">
+    <div data-cc-widget-header title="Register"></div>
+    <form class="widget-content user">
+        <ul ng-hide="vm.validation.messages.length == 0" class="list-group list-unstyled">
+            <li ng-repeat="message in vm.validation.messages" class="list-group-item-danger">
+                {{message}}
+            </li>
+        </ul>
+        <div class="form-group">
+            <h6>Email:</h6>
+            <input class="form-control" type="email" id="Email" name="Email" ng-model="vm.registerVM.Email" />
+            <br />
+            <h6>Password:</h6>
+            <input class="form-control" type="password" id="Password" name="Password" ng-model="vm.registerVM.Password" />
+            <br />
+            <h6>Confirm Password:</h6>
+            <input class="form-control" type="password" id="ConfirmPassword" name="ConfirmPassword" ng-model="vm.registerVM.ConfirmPassword" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-default" ng-click="registerUser()">Register</button>
+            <button class="btn btn-lg btn-default" ng-click="closeThisDialog()">Cancel</button>
+        </div>
+    </form>
+</div>

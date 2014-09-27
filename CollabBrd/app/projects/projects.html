@@ -1,0 +1,89 @@
+﻿<section class="mainbar" data-ng-controller="projects as vm">
+    <section class="matter">
+        <div class="container">
+            <div class="row">
+                <div class="widget wblue">
+                    <div data-cc-widget-header title="{{vm.title}}"></div>
+                    <div class="widget-content user">
+                        <div>
+                            <button class="btn btn-default" ng-click="vm.openNewProjectModal()">New</button>
+                        </div>
+                        <div>
+                            <table class="table table-bordered table-responsive table-hover">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>
+                                            Name
+                                        </th>
+                                        <th>
+                                            Created
+                                        </th>
+                                        <th>
+                                            Modified
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="project in vm.projects" ng-class="{selected: project === vm.selectedProject}">
+                                        <td><input type="checkbox" ng-model="project.Selected" ng-click="vm.changeSelected(project)" /></td>
+                                        <td><a href="#/projects/{{project.Id}}">{{project.Name}}</a></td>
+                                        <td>{{project.CreateDate | date: 'short'}}</td>
+                                        <td>{{project.ModifyDate | date: 'short'}}</td>
+                                        <td>
+                                            <button class="btn btn-default" ng-click="vm.openEditProjectModal(project)">Edit</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <br />
+                        <div>
+                            <button class="btn btn-danger" ng-click="vm.openDeleteProjectModal()" ng-disabled="vm.selectedProjects.length == 0">Delete <span ng-hide="vm.selectedProjects.length == 0" class="badge badge-info">{{vm.selectedProjects.length}}</span></button>
+                        </div>
+                    </div>
+                    <div class="widget-foot">
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+<script type="text/ng-template" id="confirm-delete-dialog">
+    <h4>Are you sure you want to delete {{vm.length}} project(s).</h4>
+    <div>
+        <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(true)">Yes</button>
+        <button class="btn btn-lg btn-default" ng-click="closeThisDialog(false)">No</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="add-dialog">
+    <h4>Create New Project</h4>
+    <form class="form">
+        <div class="form-group">
+            <h5>Name: </h5>
+            <input class="form-control" type="text" ng-model="vm.Name" required />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)">OK</button>
+            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)">Cancel</button>
+        </div>
+    </form>
+</script>
+
+<script type="text/ng-template" id="edit-dialog">
+    <h4>Edit Project</h4>
+    <form class="form">
+        <div class="form-group">
+            <h5>Name: </h5>
+            <input class="form-control" type="text" ng-model="vm.Name" required />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-danger" ng-click="closeThisDialog(vm)">OK</button>
+            <button class="btn btn-lg btn-default" ng-click="closeThisDialog(null)">Cancel</button>
+        </div>
+    </form>
+</script>

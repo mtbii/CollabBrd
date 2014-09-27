@@ -1,0 +1,17 @@
+﻿<div class="widget wblue borderless-ngDialog">
+    <div data-cc-widget-header title="Login"></div>
+    <form class="widget-content user">
+        <h4 class="label label-important">You are required to login before accessing this page.</h4>
+        <div class="form-group">
+            <h6>Email:</h6>
+            <input class="form-control" type="email" id="Email" name="Email" ng-model="vm.userName" />
+            <br />
+            <h6>Password:</h6>
+            <input class="form-control" type="password" id="Password" name="Password" ng-model="vm.password" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-lg btn-default" ng-click="loginUser()">Login</button>
+            <button class="btn btn-lg btn-default" ng-click="closeThisDialog('register')">Register</button>
+        </div>
+    </form>
+</div>

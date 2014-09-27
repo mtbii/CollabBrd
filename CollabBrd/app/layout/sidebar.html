@@ -1,0 +1,21 @@
+﻿<div data-cc-sidebar data-ng-controller="sidebar as vm">
+    <div class="sidebar-filler"></div>
+    <div class="sidebar-dropdown"><a href="#">Menu</a></div>
+    <div class="sidebar-inner">
+        <!--<div class="sidebar-widget">
+        </div>-->
+        <ul class="navi">
+            <li ng-hide="vm.user.isAuth">
+                <a ng-click="vm.login()">Login</a>
+            </li>
+            <li ng-hide="!vm.user.isAuth">
+                <h6><i class="fa fa-user"></i>Hi, {{vm.user.userName}}</h6>
+                <a ng-click="vm.logout()">Logout</a>
+            </li>
+            <li class="nlightblue fade-selection-animation" data-ng-class="vm.isCurrent(r)"
+                data-ng-repeat="r in vm.navRoutes" ng-hide="r.authentication && !vm.user.isAuth">
+                <a href="#{{r.url}}" data-ng-bind-html="r.config.settings.content"></a>
+            </li>
+        </ul>
+    </div>
+</div>
