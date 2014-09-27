@@ -95,6 +95,7 @@
 
         $scope.vm = {
             registerVM: {
+                UserName: '',
                 Email: '',
                 Password: '',
                 ConfirmPassword: ''
@@ -108,7 +109,7 @@
             $scope.vm.validation = { messages: [] };
 
             common.auth.register($scope.vm.registerVM).then(function (response) {
-                $scope.closeThisDialog(true)
+                $scope.closeThisDialog($scope.vm)
             },
             function (error) {
 

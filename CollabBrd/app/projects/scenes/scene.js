@@ -1,17 +1,17 @@
 ﻿(function () {
     'use strict';
 
-    var controllerId = 'projects';
+    var controllerId = 'scene';
 
     angular
         .module('app')
-        .controller(controllerId, projects);
+        .controller(controllerId, scene);
 
-    projects.$inject = ['$location', 'common', 'datacontext'];
+    scene.$inject = ['$location', 'common', 'datacontext'];
 
     var app = angular.module('app');
 
-    function projects($location, common, datacontext) {
+    function scene($location, common, datacontext) {
 
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
@@ -118,13 +118,14 @@
 
         function activate() {
             common.activateController([getProjects()], controllerId)
-                .then(function () { log('Activated Projects View'); });
+                .then(function () { log('Activated Scene View'); });
         }
 
         function getProjects() {
             return datacontext.projects.getProjects().then(function (data) {
-                common.utils.addProperty(data, { key: 'Selected', value: false });
-                return vm.projects = data;
+                var results = data.results;
+                common.utils.addProperty(results, { key: 'Selected', value: false });
+                return vm.projects = results;
             });
         }
     }

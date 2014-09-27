@@ -1,15 +1,15 @@
 ﻿(function () {
     'use strict';
 
-    var controllerId = 'projectDetail'
+    var controllerId = 'sceneDetail'
 
     angular
         .module('app')
-        .controller(controllerId, projectDetail);
+        .controller(controllerId, sceneDetail);
 
-    projectDetail.$inject = ['$location', '$routeParams', 'datacontext', 'common'];
+    sceneDetail.$inject = ['$location', '$routeParams', 'datacontext', 'common'];
 
-    function projectDetail($location, $routeParams, datacontext, common) {
+    function sceneDetail($location, $routeParams, datacontext, common) {
         /* jshint validthis:true */
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
@@ -29,8 +29,9 @@
 
         function getScenes() {
             return datacontext.scenes.getScenes(vm.projectId).then(function (data) {
-                common.utils.addProperty(data, { key: 'Selected', value: false });
-                return vm.scenes = data;
+                var results = data.results;
+                common.utils.addProperty(results, { key: 'Selected', value: false });
+                return vm.scenes = results;
             });
         }
     }

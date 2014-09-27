@@ -29,8 +29,9 @@
 
         function getScenes() {
             return datacontext.scenes.getScenes(vm.projectId).then(function (data) {
-                common.utils.addProperty(data, { key: 'Selected', value: false });
-                return vm.scenes = data;
+                var results = data.results;
+                common.utils.addProperty(results, { key: 'Selected', value: false });
+                return vm.scenes = results;
             });
         }
     }

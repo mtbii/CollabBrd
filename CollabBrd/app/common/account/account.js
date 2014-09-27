@@ -5,9 +5,12 @@
         .module('app')
         .factory('account', account);
 
-    account.$inject = ['$http', 'dialog'];
+    account.$inject = ['$http', 'dialog', 'logger', '$q', 'authentication'];
 
-    function account($http, dialog) {
+    function account($http, dialog, logger, $q, auth) {
+
+        var logError = logger.getLogFn('account', 'error');
+
         var service = {
             login: login,
             loginForced: loginForced,
@@ -32,10 +35,23 @@
         }
 
         function register() {
-            return dialog.open({
+            var defered = $q.defer();
+
+            dialog.open({
                 template: '/app/common/account/dialogs/register-dialog.html',
                 controller: 'register'
-            }).closePromise
+            }).closePromise.then
+            (function (data) {
+                var creds = data.value.registerVM;
+                auth.login({ userName: creds.UserName, password: creds.Password }).then(function (data) {
+                    defered.resolve(true);
+                });
+            }, function (error) {
+                logError('An error occured while trying to login.');
+                defered.reject(error.value);
+            })
+
+            return defered.promise;
         }
 
         function logout() {

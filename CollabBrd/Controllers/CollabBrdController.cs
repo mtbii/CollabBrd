@@ -23,13 +23,13 @@ namespace CollabBrd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Project> Projects()
+        public IQueryable<Project> Projects()
         {
             return _repository.Projects;
         }
 
         [HttpGet]
-        public IEnumerable<Scene> Scenes()
+        public IQueryable<Scene> Scenes()
         {
             return _repository.Scenes;
         }

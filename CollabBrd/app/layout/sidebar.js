@@ -39,14 +39,18 @@
         }
 
         vm.register = function () {
-            common.account.register().then(function (data) {
+            var promise = common.account.register();
+
+            promise.then(function (data) {
                 var success = data.value;
 
                 if (success) {
                     common.auth.fillAuthData();
                     vm.user = common.auth.authentication;
                 }
-            })
+            }, function (error) {
+                console.log(error)
+            });
         }
 
         function activate() { getNavRoutes(); }
