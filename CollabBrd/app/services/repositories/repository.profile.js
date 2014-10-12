@@ -7,9 +7,9 @@
         .module('app')
         .factory(serviceId, repository);
 
-    repository.$inject = ['model', 'repository.abstract'];
+    repository.$inject = ['model', 'repository.abstract', '$http'];
 
-    function repository(model, AbstractRepository) {
+    function repository(model, AbstractRepository, $http) {
         var entityName = 'Profile';
         var EntityQuery = breeze.EntityQuery;
         var orderBy = 'UserName';
@@ -23,7 +23,8 @@
             this.getPartials = getPartials;
             this.getById = getById;
             this.create = create;
-            this.getCurrentUser = getCurrentUser
+            this.getCurrentUser = getCurrentUser;
+            this.getGuestProfile = getGuestProfile;
         }
 
         AbstractRepository.extend(Ctor);
@@ -114,6 +115,32 @@
 
         function getById(id, forceRemote, eagerLoad) {
             return this._getById(entityName, id, forceRemote, eagerLoad);
+        }
+
+        function getGuestProfile() {
+            var self = this;
+            var profile = null;
+
+            if (self._areItemsLoaded() && !forceRemote) {
+                return EntityQuery.from('GuestProfile').toType(entityName)
+                .using(self.manager).executeLocally()
+                .then(querySucceeded, self._queryFailed);
+            }
+
+            return EntityQuery.from('GuestProfile').toType(entityName)
+                .using(self.manager).execute()
+                .then(querySucceeded, self._queryFailed);
+
+            function querySucceeded(data) {
+                self.log('Retrieved [GuestProfile]', data, true);
+                if (data.results.length > 0) {
+                    profile = data.results[0];
+                    return profile;
+                }
+                return null;
+            }
+
+            return profile;
         }
     }
 })();

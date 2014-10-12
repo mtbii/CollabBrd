@@ -47,5 +47,17 @@ namespace CollabBrd.Models
         {
             return new Profile(u);
         }
+
+        public static ApplicationUser AsApplicationUser(Profile user)
+        {
+            return new ApplicationUser()
+            {
+                Id = user.Id,
+                UserName = user.DisplayName,
+                LastActivityDate = user.LastLogin,
+                CreateDate = user.CreateDate,
+                Projects = user.Projects,
+            };
+        }
     }
 }

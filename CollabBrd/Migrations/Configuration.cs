@@ -1,5 +1,6 @@
 namespace CollabBrd.Migrations
 {
+    using Microsoft.AspNet.Identity.EntityFramework;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
@@ -27,6 +28,9 @@ namespace CollabBrd.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            context.Roles.AddOrUpdate(new IdentityRole[] { new IdentityRole("Guest"), new IdentityRole("Member"), new IdentityRole("Administrator") });
+            context.SaveChangesAsync();
         }
     }
 }

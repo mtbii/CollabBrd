@@ -61,7 +61,7 @@
                     title: 'start page',
                     settings: {
                         nav: 1,
-                        content: '<i></i> Start Page'
+                        content: '<i></i> Quick Start'
                     }
                 }
             },

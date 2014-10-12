@@ -14,7 +14,8 @@
 
         var _authentication = {
             isAuth: false,
-            userName: ""
+            role: 'Guest',
+            userName: ''
         };
 
         var _saveRegistration = function (registration) {
@@ -45,6 +46,7 @@
 
                 _authentication.isAuth = true;
                 _authentication.userName = loginData.userName;
+                _authentication.role = "Member";
 
                 deferred.resolve(response);
 
@@ -63,29 +65,49 @@
 
             _authentication.isAuth = false;
             _authentication.userName = "";
+            _authentication.role = "Guest";
 
         };
 
         var _fillAuthData = function () {
 
             var authData = localStorageService.get('authorizationData');
-            if (authData) {
+            if (authData && authData.token != 'Guest') {
                 _authentication.isAuth = true;
                 _authentication.userName = authData.userName;
+                _authentication.role = "Member";
             }
 
         }
 
-        var _isAuthRoute = function (route) {
-            console.log(route);
+        function _setGuestProfile(profile) {
+            _authentication.role = "Guest";
+            _authentication.userName = profile.DisplayName;
+            localStorageService.set('guestData',
+                {
+                    Id: profile.Id,
+                    DisplayName: profile.DisplayName
+                });
         }
+
+        function _getGuestProfile() {
+            var authData = localStorageService.get('guestData');
+
+            if (authData) {
+                _authentication.userName = authData.DisplayName;
+            }
+
+            return authData;
+        }
+
 
         authServiceFactory.register = _saveRegistration;
         authServiceFactory.login = _login;
         authServiceFactory.logOut = _logOut;
         authServiceFactory.fillAuthData = _fillAuthData;
         authServiceFactory.authentication = _authentication;
-        authServiceFactory.isAuthRoute = _isAuthRoute;
+        authServiceFactory.getGuestProfile = _getGuestProfile;
+        authServiceFactory.setGuestProfile = _setGuestProfile;
 
         return authServiceFactory;
     };

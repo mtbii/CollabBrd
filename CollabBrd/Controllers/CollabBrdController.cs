@@ -15,7 +15,8 @@ namespace CollabBrd.Controllers
     //[Authorize]
     public class CollabBrdController : ApiController
     {
-        CollabBrdRepository _repository = new CollabBrdRepository();
+        private CollabBrdRepository _repository = new CollabBrdRepository();
+        private static volatile uint guestCount = 0;
 
         [HttpGet]
         public string Metadata()
@@ -61,6 +62,20 @@ namespace CollabBrd.Controllers
                 return project.Scenes.AsQueryable();
             }
             throw new Exception(String.Format("No Project with Id = {0} exists.", id));
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public Profile GuestProfile()
+        {
+            return new Profile()
+            {
+                Id = Guid.NewGuid().ToString(),
+                DisplayName = "Guest" + ++guestCount,
+                LastLogin = DateTime.Now,
+                CreateDate = DateTime.Now
+            };
         }
 
         [HttpPost]

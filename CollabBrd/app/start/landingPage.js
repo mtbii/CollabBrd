@@ -8,13 +8,13 @@
         var log = getLogFn(controllerId);
 
         var vm = this;
-        vm.title = 'Start';
+        vm.title = 'Quick Start';
 
         activate();
 
         function activate() {
             common.activateController([], controllerId)
-                .then(function () { log('Activated Start View'); });
+                .then(function () { log('Activated Quick Start View'); });
         }
     }
 })();

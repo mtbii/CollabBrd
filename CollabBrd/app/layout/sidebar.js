@@ -3,17 +3,17 @@
 
     var controllerId = 'sidebar';
     angular.module('app').controller(controllerId,
-        ['$route', 'config', 'routes', 'common', '$location', sidebar]);
+        ['config', 'routes', 'common', 'datacontext', '$location', '$route', sidebar]);
 
-    function sidebar($route, config, routes, common, $location) {
+    function sidebar(config, routes, common, datacontext, $location, $route) {
         var vm = this;
 
         vm.isCurrent = isCurrent;
 
-        activate();
-
         common.auth.fillAuthData();
         vm.user = common.auth.authentication;
+
+        activate();
 
         vm.login = function () {
             common.account.login().then(function (data) {
@@ -53,7 +53,25 @@
             });
         }
 
-        function activate() { getNavRoutes(); }
+        function activate() {
+            getNavRoutes();
+            requestGuestAccess();
+        }
+
+        function requestGuestAccess() {
+            if (!vm.user.isAuth) {
+                var guest = common.auth.getGuestProfile();
+                if (guest == null) {
+                    datacontext.profile.getGuestProfile().then(function (profile) {
+                        common.auth.setGuestProfile(profile);
+                        vm.user = common.auth.authentication;
+                    });
+                }
+                else {
+                    vm.user = common.auth.authentication;
+                }
+            }
+        }
 
         function getNavRoutes() {
             vm.navRoutes = routes.filter(function (r) {
