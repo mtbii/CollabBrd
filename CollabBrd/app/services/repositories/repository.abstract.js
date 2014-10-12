@@ -128,7 +128,7 @@
                     }
 
                     if (fullyLoaded) {
-                        return $q.when(entity);
+                        return Ctor.prototype.$q.when(entity);
                     }
                     else {
                         return loadFromRemote();

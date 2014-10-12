@@ -40,14 +40,14 @@
 
             if (self._areItemsLoaded() && !forceRemote) {
                 return EntityQuery.from('UserProjects').toType(entityName)
-                .select('Id, Name, CreateDate, ModifyDate')
+                .select('Id, OwnerId, Name, CreateDate, ModifyDate')
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
             return EntityQuery.from('UserProjects').toType(entityName)
-            .select('Id, Name, CreateDate, ModifyDate')
+            .select('Id, OwnerId, Name, CreateDate, ModifyDate')
             .orderBy(orderBy)
             .using(self.manager).execute()
             .then(querySucceeded, self._queryFailed);

@@ -44,7 +44,7 @@
                     return moment(this.CreateDate).format('M/D/YY hh:mm a');
                 },
                 set: function (value) {
-                    this.CreateDate = moment(value).format('M/D/YY hh:mm a');
+                    this.CreateDate = moment(value).toDate();
                 }
             });
 
@@ -53,7 +53,7 @@
                     return moment(this.ModifyDate).format('M/D/YY hh:mm a');
                 },
                 set: function (value) {
-                    this.ModifyDate = moment(value).format('M/D/YY hh:mm a');
+                    this.ModifyDate = moment(value).toDate();
                 }
             });
         }
@@ -70,7 +70,7 @@
                     return moment(this.CreateDate).format('M/D/YY hh:mm a');
                 },
                 set: function (value) {
-                    this.CreateDate = moment(value).format('M/D/YY hh:mm a');
+                    this.CreateDate = moment(value).toDate();
                 }
             });
 
@@ -79,7 +79,7 @@
                     return moment(this.ModifyDate).format('M/D/YY hh:mm a');
                 },
                 set: function (value) {
-                    this.ModifyDate = moment(value).format('M/D/YY hh:mm a');
+                    this.ModifyDate = moment(value).toDate();
                 }
             });
         }

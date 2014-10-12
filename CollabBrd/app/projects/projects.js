@@ -17,14 +17,6 @@
         var log = getLogFn(controllerId);
         var logSuccess = getLogFn(controllerId, 'success');
 
-        //var default_project = {
-        //    Selected: false,
-        //    Id: -1,
-        //    Name: '',
-        //    CreateDate: moment().toDate(),
-        //    ModifyDate: moment().toDate()
-        //};
-
         var vm = this;
         vm.title = 'My Projects';
         vm.projects = [];
@@ -38,11 +30,13 @@
                 controller: ['$scope', function ($scope) {
                     $scope.vm = datacontext.project.create();
 
-                    Object.defineProperty($scope.vm, 'canSave', {
-                        get: function () {
-                            return !vm.isSaving;
-                        }
-                    });
+                    if ($scope.vm.canSave === undefined) {
+                        Object.defineProperty($scope.vm, 'canSave', {
+                            get: function () {
+                                return !vm.isSaving;
+                            }
+                        });
+                    }
                 }]
             })
             .closePromise.then(function (data) {
@@ -78,13 +72,11 @@
 
                 return datacontext.save().then(function (saveResult) {
                     vm.isSaving = false;
-                    logSuccess(project.Name + ' created successfully.');
+                    logSuccess(project.Name + ' saved successfully.');
 
                 }, function (error) {
                     vm.isSaving = false;
                 });
-
-                //vm.projects.push(project);
             }
         }
 
@@ -92,15 +84,21 @@
             common.dialog.open({
                 template: 'edit-dialog',
                 controller: ['$scope', function ($scope) {
-                    $scope.vm = project //deep clone the selected project
+                    $scope.vm = project
                     vm.editedProject = project;
+
+                    if ($scope.vm.canSave === undefined) {
+                        Object.defineProperty($scope.vm, 'canSave', {
+                            get: function () {
+                                return !vm.isSaving;
+                            }
+                        });
+                    }
                 }]
             })
              .closePromise.then(function (data) {
                  var projectData = data.value;
                  if (projectData != null) {
-                     //projectData = $.extend({}, default_project, projectData);
-                     //vm.editProject(projectData);
                      vm.saveProject(projectData);
                  }
                  else {
@@ -108,14 +106,6 @@
                  }
              });
         }
-
-        //vm.editProject = function (project) {
-        //    if (project != null) {
-        //        vm.projects[vm.projects.indexOf(vm.editedProject)] = project;
-        //        vm.editedProject = null;
-        //        logSuccess(project.Name + ' edited successfully.');
-        //    }
-        //}
 
         vm.openDeleteProjectModal = function () {
             common.dialog.open({

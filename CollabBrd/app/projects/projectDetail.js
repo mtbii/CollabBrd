@@ -70,7 +70,7 @@
 
                 return datacontext.save().then(function (saveResult) {
                     vm.isSaving = false;
-                    logSuccess(scene.Name + ' created successfully.');
+                    logSuccess(scene.Name + ' saved successfully.');
 
                 }, function (error) {
                     vm.isSaving = false;

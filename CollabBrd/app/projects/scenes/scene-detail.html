@@ -6,10 +6,10 @@
                     <div data-cc-widget-header title="{{vm.title}}"></div>
                     <div class="widget-content user">
                         <div>
-                            <form ng-model="vm.scene">
-                                Name: {{Name}} <br /><br />
-                                Created On: {{CreateDate | date: 'short'}}<br /><br />
-                                Modified On: {{ModifyDate | date: 'short'}}<br /><br />
+                            <form>
+                                Name: {{vm.scene.Name}} <br /><br />
+                                Created On: {{vm.scene.CreateDate | date: 'short'}}<br /><br />
+                                Modified On: {{vm.scene.ModifyDate | date: 'short'}}<br /><br />
                                 <br />
                             </form>
                         </div>
