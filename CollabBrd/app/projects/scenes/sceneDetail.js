@@ -19,13 +19,13 @@
         vm.title = 'Scene Detail';
         vm.sceneId = $routeParams.sceneId;
         vm.projectId = $routeParams.projectId;
-        vm.scene;
+        vm.scene = null;
 
         activate();
 
         function activate() {
             common.activateController([getScene()], controllerId)
-                .then(function () { log('Activated Project Detail View'); });
+                .then(function () { log('Activated Scene Detail View'); });
         }
 
         function getScene() {

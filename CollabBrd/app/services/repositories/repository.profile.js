@@ -39,12 +39,12 @@
             var profile = null;
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('CurrentUser')
+                return EntityQuery.from('CurrentUser').toType(entityName)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('CurrentUser')
+            return EntityQuery.from('CurrentUser').toType(entityName)
                 .using(self.manager).execute()
                 .then(querySucceeded, self._queryFailed);
 
@@ -65,14 +65,14 @@
             var profiles = [];
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('UserProfiles')
+                return EntityQuery.from('UserProfiles').toType(entityName)
                 .select('Id, UserName, CreateDate')
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('UserProfiles')
+            return EntityQuery.from('UserProfiles').toType(entityName)
                 .select('Id, UserName, CreateDate')
                 .orderBy(orderBy)
                 .using(self.manager).execute()
@@ -93,14 +93,14 @@
             var self = this;
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('UserProfiles')
+                return EntityQuery.from('UserProfiles').toType(entityName)
                 //.where(predicate)
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('UserProfiles')
+            return EntityQuery.from('UserProfiles').toType(entityName)
                 //.where(predicate)
                 .orderBy(orderBy)
                 .using(self.manager).execute()
@@ -112,8 +112,8 @@
             }
         }
 
-        function getById(id, forceRemote) {
-            return this._getById(entityName, id, forceRemote);
+        function getById(id, forceRemote, eagerLoad) {
+            return this._getById(entityName, id, forceRemote, eagerLoad);
         }
     }
 })();

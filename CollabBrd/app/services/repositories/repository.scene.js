@@ -39,13 +39,13 @@
             var scenes = [];
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('Scenes')
+                return EntityQuery.from('Scenes').toType(entityName)
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('Scenes')
+            return EntityQuery.from('Scenes').toType(entityName)
                 .orderBy(orderBy)
                 .using(self.manager).execute()
                 .then(querySucceeded, self._queryFailed);
@@ -64,14 +64,14 @@
             var scenes = [];
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('Scenes')
+                return EntityQuery.from('Scenes').toType(entityName)
                 .select('Id, Name, CreateDate, ModifyDate, ProjectId')
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('Scenes')
+            return EntityQuery.from('Scenes').toType(entityName)
                 .select('Id, Name, CreateDate, ModifyDate, ProjectId')
                 .orderBy(orderBy)
                 .using(self.manager).execute()
@@ -93,7 +93,7 @@
             var scenes = [];
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('Scenes')
+                return EntityQuery.from('Scenes').toType(entityName)
                 .select('Id', 'Name', 'CreateDate', 'ModifyDate', 'ProjectId')
                 .where(whereClause)
                 .orderBy(orderBy)
@@ -101,7 +101,7 @@
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('Scenes')
+            return EntityQuery.from('Scenes').toType(entityName)
                 .select('Id, Name, CreateDate, ModifyDate, ProjectId')
                 .where(whereClause)
                 .orderBy(orderBy)
@@ -126,14 +126,14 @@
             var scenes = [];
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('Scenes')
+                return EntityQuery.from('Scenes').toType(entityName)
                 .where(whereClause)
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('Scenes')
+            return EntityQuery.from('Scenes').toType(entityName)
                 .where(whereClause)
                 .orderBy(orderBy)
                 .using(self.manager).execute()
@@ -148,8 +148,8 @@
             return scenes;
         }
 
-        function getById(id, forceRemote) {
-            return this._getById(entityName, id, forceRemote);
+        function getById(id, forceRemote, eagerLoad) {
+            return this._getById(entityName, id, forceRemote, eagerLoad);
         }
     }
 })();

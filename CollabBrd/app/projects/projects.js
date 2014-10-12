@@ -54,8 +54,7 @@
                             projectData.OwnerId = user.Id;
                             vm.saveProject(projectData);
                         }
-                        else
-                        {
+                        else {
                             datacontext.cancel();
                         }
                     });
@@ -135,11 +134,17 @@
         vm.deleteProjects = function () {
 
             for (var i = 0; i < vm.selectedProjects.length; i++) {
+                vm.selectedProjects[i].entityAspect.setDeleted();
                 vm.projects.splice(vm.projects.indexOf(vm.selectedProjects[i]), 1);
             }
 
-            logSuccess(vm.selectedProjects.length + ' project(s) deleted.');
-            vm.selectedProjects = [];
+            vm.isSaving = true;
+
+            return datacontext.save().then(function () {
+                vm.isSaving = false;
+                logSuccess(vm.selectedProjects.length + ' project(s) deleted.');
+                vm.selectedProjects = [];
+            });
         }
 
         vm.changeSelected = function (project) {

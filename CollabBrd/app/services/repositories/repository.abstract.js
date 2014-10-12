@@ -49,7 +49,7 @@
             .executeLocally();
         }
 
-        function _getById(entityName, id, forceRemote) {
+        function _getById(entityName, id, forceRemote, eagerLoad) {
             var self = this;
             var manager = self.manager;
             var entityType = null;
@@ -67,8 +67,35 @@
                 }
             }
 
-            return manager.fetchEntityByKey(entityName, id)
-            .then(querySucceeded, self._queryFailed);
+            return loadFromRemote();
+
+            function loadFromRemote() {
+
+                if (eagerLoad != null) {
+                    return EntityQuery.from(manager.metadataStore.getEntityType(entityName).defaultResourceName)
+                    .where('Id', 'eq', id)
+                    .expand(eagerLoad)
+                    .using(manager).execute()
+                    .then(queryWithExpandSucceeded, self._queryFailed);
+                }
+                else {
+                    return manager.fetchEntityByKey(entityName, id)
+                    .then(querySucceeded, self._queryFailed);
+                }
+            }
+
+            function queryWithExpandSucceeded(data) {
+                if (data.results && data.results.length > 0) {
+                    var entity = data.results[0];
+                    if (!entity) {
+                        self.log('Could not find [' + entityName + '] id:' + id, null, true);
+                    }
+                    entity.isPartial = false;
+                    self.log('Retrieved [' + entityName + '] id:' + entity.Id + ' from remote data source.', entity, true);
+                    return entity;
+                }
+                return null;
+            }
 
             function querySucceeded(data) {
                 var entity = data.entity;
@@ -82,17 +109,34 @@
 
             function fetchEntity() {
                 var entity = manager.getEntityByKey(new breeze.EntityKey(entityType, new Number(id)));
+                var fullyLoaded = true;
                 if (entity && !entity.isPartial) {
-                    self.log('Retrieved [' + entityName + '] id:' + entity.Id + ' from cache.', entity, true);
-                    if (entity.entityAspect.entityState.isDeleted()) {
-                        entity = null;
+                    if (eagerLoad != null) {
+                        var eagerLoadList = eagerLoad.split(',');
+                        for (var i = 0; i < eagerLoadList.length; i++) {
+                            if (entity[eagerLoadList[i].trim()] == null) {
+                                fullyLoaded = false;
+                                break;
+                            }
+                        }
                     }
-                    return $q.when(entity);
+                    else {
+                        self.log('Retrieved [' + entityName + '] id:' + entity.Id + ' from cache.', entity, true);
+                        if (entity.entityAspect.entityState.isDeleted()) {
+                            entity = null;
+                        }
+                    }
+
+                    if (fullyLoaded) {
+                        return $q.when(entity);
+                    }
+                    else {
+                        return loadFromRemote();
+                    }
                 }
 
-                //Not in cache, retrieve from server
-                return manager.fetchEntityByKey(entityName, id)
-            .then(querySucceeded, self._queryFailed);
+                //Not in cache, so retrieve from server
+                return loadFromRemote();
             }
         }
 

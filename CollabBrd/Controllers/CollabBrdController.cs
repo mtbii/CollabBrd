@@ -42,9 +42,9 @@ namespace CollabBrd.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Profile> Profiles()
+        public IQueryable<Profile> Profiles()
         {
-            return _repository.Profiles;
+            return Queryable.AsQueryable(_repository.Profiles);
         }
         [HttpGet]
         public IQueryable<Project> UserProjects()

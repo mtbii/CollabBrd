@@ -39,18 +39,18 @@
             var projects = [];
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('UserProjects')
+                return EntityQuery.from('UserProjects').toType(entityName)
                 .select('Id, Name, CreateDate, ModifyDate')
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('UserProjects')
-                .select('Id, Name, CreateDate, ModifyDate')
-                .orderBy(orderBy)
-                .using(self.manager).execute()
-                .then(querySucceeded, self._queryFailed);
+            return EntityQuery.from('UserProjects').toType(entityName)
+            .select('Id, Name, CreateDate, ModifyDate')
+            .orderBy(orderBy)
+            .using(self.manager).execute()
+            .then(querySucceeded, self._queryFailed);
 
             function querySucceeded(data) {
                 self.log('Retrieved [User Projects]', data, true);
@@ -67,14 +67,14 @@
             var self = this;
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('UserProjects')
+                return EntityQuery.from('UserProjects').toType(entityName)
                 //.where(predicate)
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('UserProjects')
+            return EntityQuery.from('UserProjects').toType(entityName)
                 //.where(predicate)
                 .orderBy(orderBy)
                 .using(self.manager).execute()
@@ -86,8 +86,8 @@
             }
         }
 
-        function getById(id, forceRemote) {
-            return this._getById(entityName, id, forceRemote);
+        function getById(id, forceRemote, eagerLoad) {
+            return this._getById(entityName, id, forceRemote, eagerLoad);
         }
     }
 })();

@@ -64,6 +64,24 @@
             function Scene() {
                 this.isPartial = false;
             }
+
+            Object.defineProperty(Scene.prototype, 'CreateDateFormatted', {
+                get: function () {
+                    return moment(this.CreateDate).format('M/D/YY hh:mm a');
+                },
+                set: function (value) {
+                    this.CreateDate = moment(value).format('M/D/YY hh:mm a');
+                }
+            });
+
+            Object.defineProperty(Scene.prototype, 'ModifyDateFormatted', {
+                get: function () {
+                    return moment(this.ModifyDate).format('M/D/YY hh:mm a');
+                },
+                set: function (value) {
+                    this.ModifyDate = moment(value).format('M/D/YY hh:mm a');
+                }
+            });
         }
     }
 })();

@@ -24,11 +24,11 @@
         activate();
 
         function activate() {
-            common.activateController([getScenes()], controllerId)
-                .then(function () { log('Activated Scene View'); });
+            common.activateController([getScene()], controllerId)
+                .then(function () { log('Activated Scene Design View'); });
         }
 
-        function getScenes() {
+        function getScene() {
             return datacontext.scene.getById(vm.sceneId).then(function (data) {
                 var results = data;
                 return vm.scene = results;
