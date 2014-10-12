@@ -57,3 +57,4 @@
 /// <reference path="../app/services/authinterceptor.js" />
 /// <reference path="../app/services/repositories/repository.profile.js" />
 /// <reference path="fabric.js" />
+/// <reference path="../app/services/canvasservice.js" />

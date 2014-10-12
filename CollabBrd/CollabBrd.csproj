@@ -270,6 +270,7 @@
     <Content Include="app\config.route.js" />
     <Content Include="app\dashboard\dashboard.html" />
     <Content Include="app\dashboard\dashboard.js" />
+    <Content Include="app\layout\fabric-canvas.html" />
     <Content Include="app\layout\shell.html" />
     <Content Include="app\layout\shell.js" />
     <Content Include="app\layout\sidebar.html" />
@@ -286,6 +287,7 @@
     <Content Include="app\projects\scenes\scene.js" />
     <Content Include="app\projects\scenes\sceneDetail.js" />
     <Content Include="app\services\authInterceptor.js" />
+    <Content Include="app\services\canvasService.js" />
     <Content Include="app\services\datacontext.js" />
     <Content Include="app\services\directives.js" />
     <Content Include="app\services\entityManagerFactory.js" />
