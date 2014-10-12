@@ -52,30 +52,47 @@
         function _getById(entityName, id, forceRemote) {
             var self = this;
             var manager = self.manager;
+            var entityType = null;
 
             if (!forceRemote) {
-                var entity = manager.getEntityByKey(entityName, id);
-                if (entity && !entity.isPartial) {
-                    self.log('Retrieved [' + entityName + '] id:' + entity.id + ' from cache.', entity, true);
-                    if (entity.entityAspect.entityState.isDeleted()) {
-                        entity = null;
-                    }
-                    return $q.when(entity);
+                try {
+                    entityType = manager.metadataStore.getEntityType(entityName);
+                    return fetchEntity();
                 }
-
+                catch (e) {
+                    return manager.fetchMetadata().then(function () {
+                        entityType = manager.metadataStore.getEntityType(entityName);
+                        return fetchEntity();
+                    });
+                }
             }
 
             return manager.fetchEntityByKey(entityName, id)
             .then(querySucceeded, self._queryFailed);
 
             function querySucceeded(data) {
-                entity = data.entity;
+                var entity = data.entity;
                 if (!entity) {
                     self.log('Could not find [' + entityName + '] id:' + id, null, true);
                 }
                 entity.isPartial = false;
-                self.log('Retrieved [' + entityName + '] id:' + entity.id + ' from remote data source.', entity, true);
+                self.log('Retrieved [' + entityName + '] id:' + entity.Id + ' from remote data source.', entity, true);
                 return entity;
+            }
+
+            function fetchEntity() {
+                var entity = manager.getEntityByKey(new breeze.EntityKey(entityType, new Number(id)));
+                if (entity && !entity.isPartial) {
+                    self.log('Retrieved [' + entityName + '] id:' + entity.Id + ' from cache.', entity, true);
+                    if (entity.entityAspect.entityState.isDeleted()) {
+                        entity = null;
+                    }
+                    return $q.when(entity);
+                }
+
+                //Not in cache, retrieve from server
+                return manager.fetchEntityByKey(entityName, id)
+            .then(querySucceeded, self._queryFailed);
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿(function () {
     'use strict';
 
-    var serviceId = 'repository.project';
+    var serviceId = 'repository.profile';
 
     angular
         .module('app')
@@ -10,10 +10,9 @@
     repository.$inject = ['model', 'repository.abstract'];
 
     function repository(model, AbstractRepository) {
-        var entityName = 'Project';
-        //var entityNames = model.entityNames;
+        var entityName = 'Profile';
         var EntityQuery = breeze.EntityQuery;
-        var orderBy = 'CreateDate, Name';
+        var orderBy = 'UserName';
         var Predicate = breeze.Predicate;
 
         function Ctor(mgr) {
@@ -24,6 +23,7 @@
             this.getPartials = getPartials;
             this.getById = getById;
             this.create = create;
+            this.getCurrentUser = getCurrentUser
         }
 
         AbstractRepository.extend(Ctor);
@@ -34,54 +34,80 @@
             return this.manager.createEntity(this.entityName);
         }
 
-        function getPartials(forceRemote) {
+        function getCurrentUser(forceRemote) {
             var self = this;
-            var projects = [];
+            var profile = null;
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('UserProjects')
-                .select('Id, Name, CreateDate, ModifyDate')
+                return EntityQuery.from('CurrentUser')
+                .using(self.manager).executeLocally()
+                .then(querySucceeded, self._queryFailed);
+            }
+
+            return EntityQuery.from('CurrentUser')
+                .using(self.manager).execute()
+                .then(querySucceeded, self._queryFailed);
+
+            function querySucceeded(data) {
+                self.log('Retrieved [Current User]', data, true);
+                if (data.results.length > 0) {
+                    profile = data.results[0];
+                    return profile;
+                }
+                return null;
+            }
+
+            return profile;
+        }
+
+        function getPartials(forceRemote) {
+            var self = this;
+            var profiles = [];
+
+            if (self._areItemsLoaded() && !forceRemote) {
+                return EntityQuery.from('UserProfiles')
+                .select('Id, UserName, CreateDate')
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('UserProjects')
-                .select('Id, Name, CreateDate, ModifyDate')
+            return EntityQuery.from('UserProfiles')
+                .select('Id, UserName, CreateDate')
                 .orderBy(orderBy)
                 .using(self.manager).execute()
                 .then(querySucceeded, self._queryFailed);
 
             function querySucceeded(data) {
-                self.log('Retrieved [User Projects]', data, true);
-                projects = data.results;
-                self._setIsPartialTrue(projects);
+                self.log('Retrieved [User Profiles]', data, true);
+                profiles = data.results;
+                self._setIsPartialTrue(profiles);
 
-                return projects;
+                return profiles;
             }
 
-            return projects;
+            return profiles;
         }
 
         function getAll(forceRemote) {
             var self = this;
 
             if (self._areItemsLoaded() && !forceRemote) {
-                return EntityQuery.from('UserProjects')
+                return EntityQuery.from('UserProfiles')
                 //.where(predicate)
                 .orderBy(orderBy)
                 .using(self.manager).executeLocally()
                 .then(querySucceeded, self._queryFailed);
             }
 
-            return EntityQuery.from('UserProjects')
+            return EntityQuery.from('UserProfiles')
                 //.where(predicate)
                 .orderBy(orderBy)
                 .using(self.manager).execute()
                 .then(querySucceeded, self._queryFailed);
 
             function querySucceeded(data) {
-                self.log('Retrieved [User Projects]', data, true);
+                self.log('Retrieved [User Profiles]', data, true);
                 return data;
             }
         }

@@ -292,6 +292,7 @@
     <Content Include="app\services\model.js" />
     <Content Include="app\services\repositories\repositories.js" />
     <Content Include="app\services\repositories\repository.abstract.js" />
+    <Content Include="app\services\repositories\repository.profile.js" />
     <Content Include="app\services\repositories\repository.project.js" />
     <Content Include="app\services\repositories\repository.scene.js" />
     <Content Include="app\start\landingPage.html" />

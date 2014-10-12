@@ -47,10 +47,18 @@
             })
             .closePromise.then(function (data) {
                 var projectData = data.value;
-                if (projectData != null) {
+                if (common.isValidData(projectData)) {
                     projectData.CreateDateFormatted = moment();
-                    projectData.OwnerId = 'daf9a059-5a07-46f1-bd9c-4d9b56431fc2';
-                    vm.saveProject(projectData);
+                    datacontext.profile.getCurrentUser().then(function (user) {
+                        if (user != null) {
+                            projectData.OwnerId = user.Id;
+                            vm.saveProject(projectData);
+                        }
+                        else
+                        {
+                            datacontext.cancel();
+                        }
+                    });
                 }
                 else {
                     datacontext.cancel();

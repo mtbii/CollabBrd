@@ -36,11 +36,16 @@ namespace CollabBrd.Controllers
         }
 
         [HttpGet]
-        public Profile User()
+        public Profile CurrentUser()
         {
             return _repository.GetUserProfile();
         }
 
+        [HttpGet]
+        public IEnumerable<Profile> Profiles()
+        {
+            return _repository.Profiles;
+        }
         [HttpGet]
         public IQueryable<Project> UserProjects()
         {

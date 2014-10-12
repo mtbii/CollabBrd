@@ -48,9 +48,20 @@ namespace CollabBrd.Models
             return Context.Projects.Where(p => p.OwnerId == id);
         }
 
-        public IQueryable<Profile> Profiles
+        public IEnumerable<Profile> Profiles
         {
-            get { return Context.Users.Select(u => Profile.FromApplicationUser(u)); }
+            get
+            {
+                return Context.Users.AsEnumerable()
+                    .Select(user => new Profile()
+                {
+                    Id = user.Id,
+                    DisplayName = user.UserName,
+                    LastLogin = user.LastActivityDate,
+                    CreateDate = user.CreateDate,
+                    Projects = user.Projects
+                });
+            }
         }
 
         public Profile GetUserProfile()

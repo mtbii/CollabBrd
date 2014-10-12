@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using System.Web;
@@ -48,6 +49,15 @@ namespace CollabBrd.Models
         public IdentityUserRoleConfiguration()
         {
             HasKey(u => u.RoleId);
+        }
+    }
+
+    public class ProfileConfiguration : EntityTypeConfiguration<Profile>
+    {
+        public ProfileConfiguration()
+        {
+            HasKey(p => p.Id);
+            Property(p => p.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
         }
     }
 

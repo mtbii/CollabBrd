@@ -13,6 +13,7 @@ namespace CollabBrd.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+
         }
 
         public static ApplicationDbContext Create()
@@ -34,6 +35,7 @@ namespace CollabBrd.Models
             modelBuilder.Configurations.Add(new IdentityUserRoleConfiguration());
             modelBuilder.Configurations.Add(new SceneConfiguration());
             modelBuilder.Configurations.Add(new ProjectConfiguration());
+            modelBuilder.Configurations.Add(new ProfileConfiguration());
         }
 
         public DbSet<Project> Projects { get; set; }

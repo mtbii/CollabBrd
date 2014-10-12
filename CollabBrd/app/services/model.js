@@ -20,6 +20,16 @@
             registerProject(metadataStore);
             //Configure Scene
             registerScene(metadataStore);
+            //Configure Profile
+            registerProfile(metadataStore);
+        }
+
+        function registerProfile(metadataStore) {
+            metadataStore.registerEntityTypeCtor('Profile', Profile);
+
+            function Profile() {
+                this.isPartial = false;
+            }
         }
 
         function registerProject(metadataStore) {

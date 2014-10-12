@@ -11,7 +11,7 @@
         var log = getLogFn(serviceId);
         var logError = getLogFn(serviceId, 'error');
         var logSuccess = getLogFn(serviceId, 'success');
-        var repoNames = ['project', 'scene'];
+        var repoNames = ['project', 'scene', 'profile'];
 
         var service = {
             //Repositories to be added on demand

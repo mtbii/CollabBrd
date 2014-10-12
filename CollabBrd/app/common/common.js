@@ -46,7 +46,8 @@
             auth: authentication,
             account: account,
             utils: utils,
-            textContains: textContains
+            textContains: textContains,
+            isValidData: isValidData
         };
 
         return service;
@@ -133,6 +134,18 @@
 
         function textContains(text, searchText) {
             return text && -1 !== text.toLowerCase().indexOf(searchText.toLowerCase());
+        }
+
+        function isValidData(data) {
+            if (data != null && data != '$document' && data != '$closeButton' && data != '$escape') {
+                if (typeof data === 'string') {
+                    if (data.length == 0) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
         }
     }
 })();

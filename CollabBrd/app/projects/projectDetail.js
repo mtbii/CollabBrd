@@ -29,7 +29,7 @@
 
         function getScenes() {
             return datacontext.project.getById(vm.projectId).then(function (data) {
-                var results = data.results;
+                var results = data.Scenes;
                 common.utils.addProperty(results, { key: 'Selected', value: false });
                 return vm.scenes = results;
             });

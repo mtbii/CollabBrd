@@ -25,6 +25,6 @@ namespace CollabBrd.Models
 
         [ForeignKey("Owner")]
         public string OwnerId { get; set; }
-        public virtual ApplicationUser Owner { get; set; }
+        public virtual Profile Owner { get; set; }
     }
 }
