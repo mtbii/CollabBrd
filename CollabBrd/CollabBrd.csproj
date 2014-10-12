@@ -309,6 +309,7 @@
     <Content Include="Content\ie10mobile.css" />
     <Content Include="Content\images\AngularJS-small.png" />
     <Content Include="Content\images\breezelogo.png" />
+    <Content Include="Content\images\honey_im_subtle.png" />
     <Content Include="Content\images\icon.png" />
     <Content Include="Content\ngDialog-theme-default.css" />
     <Content Include="Content\ngDialog-theme-default.min.css" />
@@ -378,6 +379,8 @@
     <Content Include="Scripts\breeze.min.js" />
     <Content Include="Scripts\breeze.saveErrorExtensions.js" />
     <Content Include="Scripts\breeze.to%24q.shim.js" />
+    <Content Include="Scripts\fabric.js" />
+    <Content Include="Scripts\fabric.min.js" />
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.min.js" />
     <Content Include="Scripts\jquery-2.1.1.min.map" />
