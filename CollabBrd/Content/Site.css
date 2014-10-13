@@ -20,3 +20,8 @@ textarea {
     margin: -1em;
     border: 1px solid black;
 }
+
+.chat-box {
+    max-height: 400px;
+    overflow-y: auto;
+}

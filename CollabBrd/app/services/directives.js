@@ -200,7 +200,7 @@
         }
     });
 
-    app.directive('cbFabricCanvas', ['canvasService', function (canvasService) {
+    app.directive('cbFabricCanvas', ['canvasService', 'authentication', '$timeout', '$location', '$rootScope', function (canvasService, auth, $timeout, $location, $rootScope) {
         //Usage:
         //<data-cb-fabric-canvas></data-cb-fabric-canvas>
         var directive = {
@@ -214,12 +214,53 @@
 
         return directive;
 
+        function setupCanvasService(canvas) {
+
+            var sendTimeout;
+            var canvasOnFn = function (options) {
+                if (sendTimeout) {
+                    $timeout.cancel(sendTimeout);
+                }
+                sendTimeout = $timeout(function () {
+                    canvas.off('after:render', canvasOnFn);
+                    canvasService.sync($location.path(), auth.authentication.userName, canvas.toDatalessJSON());
+                    canvas.on('after:render', canvasOnFn);
+                }, 250);
+            }
+            canvas.on('after:render', canvasOnFn);
+
+            var updateTimeout;
+            canvasService.receiveJSON = function (name, sceneJSON) {
+                if (updateTimeout) {
+                    $timeout.cancel(updateTimeout);
+                }
+                updateTimeout = $timeout(function () {
+                    canvas.off('after:render', canvasOnFn);
+                    canvas.clear();
+                    canvas.loadFromDatalessJSON(sceneJSON, function () {
+                        canvas.renderAll();
+                        canvas.on('after:render', canvasOnFn);
+                    });
+                }, 250);
+            }
+
+            canvasService.join($location.path());
+
+            var deregisterLocationChange = $rootScope.$on('$locationChangeSuccess', function (evt, newUrl, oldUrl) {
+                canvasService.leave(oldUrl.substring(oldUrl.indexOf('#') + 1));
+                deregisterLocationChange();
+            })
+        }
+
         function link(scope, element, attrs) {
+
             var $ = function (id) { return document.getElementById(id) };
 
             var canvas = new fabric.Canvas('c', {
                 isDrawingMode: true
             });
+
+            setupCanvasService(canvas);
 
             fabric.Object.prototype.transparentCorners = false;
 
@@ -233,10 +274,6 @@
                 clearEl = $('clear-canvas');
 
             clearEl.onclick = function () { canvas.clear() };
-
-            canvas.on('after:render', function (options) {
-
-            });
 
             drawingModeEl.onclick = function () {
                 canvas.isDrawingMode = !canvas.isDrawingMode;
@@ -387,4 +424,40 @@
             }
         }
     }]);
+
+    app.directive('cbChat', ['chatService', 'authentication', function (chatService, auth) {
+
+        //Usage:
+        //<data-cb-fabric-canvas></data-cb-fabric-canvas>
+        var directive = {
+            link: link,
+            scope: {
+
+            },
+            templateUrl: '/app/layout/chat.html',
+            restrict: 'E',
+        };
+
+        return directive;
+
+        // This optional function html-encodes messages for display in the page.
+        function htmlEncode(value) {
+            var encodedValue = $('<div />').text(value).html();
+            return encodedValue;
+        }
+
+        function link(scope, element, attrs) {
+            $('#sendmessage').click(function (evt) {
+                chatService.send(auth.authentication.userName, $('#message').val());
+                // Clear text box and reset focus for next comment. 
+                $('#message').val('').focus();
+            });
+
+            chatService.receive = function (name, message) {
+                // Add the message to the page. 
+                $('#discussion').append('<li><strong>' + htmlEncode(name)
+                    + '</strong>: ' + htmlEncode(message) + '</li>');
+            }
+        }
+    }])
 })();

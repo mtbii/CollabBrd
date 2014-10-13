@@ -16,7 +16,8 @@
         'ngDialog',
         'LocalStorageModule',
         'breeze.angular',    // configures breeze for an angular app
-        'breeze.directives' // contains the breeze validation directive (zValidate)
+        'breeze.directives', // contains the breeze validation directive (zValidate)
+        'SignalR'
     ]);
 
     app.config(['ngDialogProvider', '$httpProvider', function (ngDialogProvider, $httpProvider) {
