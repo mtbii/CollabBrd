@@ -13,7 +13,7 @@ namespace CollabBrd.Controllers.Hubs
         {
             if (string.IsNullOrEmpty(roomName))
             {
-                Clients.Group("World").addNewMessageToPage(name, message);
+                Clients.Group("chat:World").addNewMessageToPage(name, message);
             }
             else
             {

@@ -249,7 +249,7 @@
             var deregisterLocationChange = $rootScope.$on('$locationChangeSuccess', function (evt, newUrl, oldUrl) {
                 canvasService.leave(oldUrl.substring(oldUrl.indexOf('#') + 1));
                 deregisterLocationChange();
-            })
+            });
         }
 
         function link(scope, element, attrs) {
@@ -425,7 +425,7 @@
         }
     }]);
 
-    app.directive('cbChat', ['chatService', 'authentication', function (chatService, auth) {
+    app.directive('cbChat', ['chatService', 'authentication', '$location', '$rootScope', function (chatService, auth, $location, $rootScope) {
 
         //Usage:
         //<data-cb-fabric-canvas></data-cb-fabric-canvas>
@@ -447,17 +447,33 @@
         }
 
         function link(scope, element, attrs) {
-            $('#sendmessage').click(function (evt) {
+            $('#message').on('keypress', function (evt) {
+                //On enter key press
+                if (evt.keyCode == 13) {
+                    submitMessage();
+                }
+            });
+
+            $('#sendmessage').click(submitMessage);
+
+            function submitMessage() {
                 chatService.send(auth.authentication.userName, $('#message').val());
                 // Clear text box and reset focus for next comment. 
                 $('#message').val('').focus();
-            });
+            }
 
             chatService.receive = function (name, message) {
                 // Add the message to the page. 
                 $('#discussion').append('<li><strong>' + htmlEncode(name)
                     + '</strong>: ' + htmlEncode(message) + '</li>');
             }
+
+            chatService.join($location.path());
+
+            var deregisterLocationChange = $rootScope.$on('$locationChangeSuccess', function (evt, newUrl, oldUrl) {
+                chatService.leave(oldUrl.substring(oldUrl.indexOf('#') + 1));
+                deregisterLocationChange();
+            });
         }
     }])
 })();
