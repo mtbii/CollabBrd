@@ -400,6 +400,7 @@
     <Content Include="Scripts\angular-signalr-hub.min.js.map">
       <DependentUpon>angular-signalr-hub.min.js</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\collabbrd.pubxml" />
     <None Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\bootstrap.js" />
