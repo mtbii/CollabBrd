@@ -71,9 +71,11 @@
                 vm.isSaving = true;
 
                 return datacontext.save().then(function (saveResult) {
-                    vm.isSaving = false;
-                    logSuccess(project.Name + ' saved successfully.');
-
+                    //refresh partial list
+                    getProjects().then(function () {
+                        vm.isSaving = false;
+                        logSuccess(project.Name + ' saved successfully.');
+                    });
                 }, function (error) {
                     vm.isSaving = false;
                 });
@@ -154,7 +156,9 @@
                 .then(function () { log('Activated Projects View'); });
         }
 
-        function getProjects() {
+        function getProjects(forceRemote) {
+            if (forceRemote == null) forceRemote = false;
+
             return datacontext.project.getPartials().then(function (data) {
                 var results = data;
                 common.utils.addProperty(results, { key: 'Selected', value: false });

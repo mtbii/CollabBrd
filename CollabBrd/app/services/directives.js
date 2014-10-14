@@ -460,7 +460,7 @@
             $('#sendmessage').click(submitMessage);
 
             function submitMessage() {
-                chatService.send(auth.authentication.userName, $('#message').val());
+                chatService.send(auth.authentication.userName, $('#message').val(), $location.path());
                 // Clear text box and reset focus for next comment. 
                 $('#message').val('').focus();
             }
