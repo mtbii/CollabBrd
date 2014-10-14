@@ -22,18 +22,28 @@ namespace CollabBrd.Controllers.Hubs
             }
         }
 
-        public async Task JoinRoom(string roomName)
+        public async Task JoinRoom(string roomName, string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+            {
+                userName = Context.User.Identity.Name;
+            }
+
             roomName = "chat:" + roomName;
             await Groups.Add(Context.ConnectionId, roomName);
-            Clients.Group(roomName).addNewMessageToPage(roomName, Context.User.Identity.Name + " joined.");
+            Clients.Group(roomName).addNewMessageToPage(roomName, userName + " joined.");
         }
 
-        public async Task LeaveRoom(string roomName)
+        public async Task LeaveRoom(string roomName, string userName)
         {
+            if (string.IsNullOrEmpty(userName))
+            {
+                userName = Context.User.Identity.Name;
+            }
+
             roomName = "chat:" + roomName;
             await Groups.Remove(Context.ConnectionId, roomName);
-            Clients.Group(roomName).addNewMessageToPage(roomName, Context.User.Identity.Name + " has left the room.");
+            Clients.Group(roomName).addNewMessageToPage(roomName, userName + " has left the room.");
         }
     }
 }

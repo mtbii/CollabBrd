@@ -223,7 +223,7 @@
                     canvas.off('after:render', canvasOnFn);
                     canvasService.sync($location.path(), auth.authentication.userName, canvas.toDatalessJSON());
                     canvas.on('after:render', canvasOnFn);
-                }, 250);
+                }, 100);
             }
             canvas.on('after:render', canvasOnFn);
 
@@ -239,10 +239,11 @@
                         canvas.renderAll();
                         canvas.on('after:render', canvasOnFn);
                     });
-                }, 250);
+                }, 50);
             }
 
             canvasService.join($location.path());
+
 
             var deregisterLocationChange = $rootScope.$on('$locationChangeSuccess', function (evt, newUrl, oldUrl) {
                 canvasService.leave(oldUrl.substring(oldUrl.indexOf('#') + 1));
@@ -258,8 +259,11 @@
                 isDrawingMode: true
             });
 
-            canvas.loadFromDatalessJSON(attrs['scene']);
-            setupCanvasService(canvas);
+
+            if ($location.path() != '/') {
+                canvas.loadFromDatalessJSON(attrs['scene']);
+                setupCanvasService(canvas);
+            }
 
             fabric.Object.prototype.transparentCorners = false;
 
@@ -427,7 +431,7 @@
     app.directive('cbChat', ['chatService', 'authentication', '$location', '$rootScope', function (chatService, auth, $location, $rootScope) {
 
         //Usage:
-        //<data-cb-fabric-canvas></data-cb-fabric-canvas>
+        //<data-cb-fabric-canvas scene="some-dataless-json"></data-cb-fabric-canvas>
         var directive = {
             link: link,
             scope: {
@@ -467,7 +471,15 @@
                     + '</strong>: ' + htmlEncode(message) + '</li>');
             }
 
-            chatService.join($location.path());
+            if (auth.authentication.userName != '' || auth.authentication.userName != null) {
+                chatService.join($location.path());
+            }
+            else {
+                var deregisterIdentityAssigned = $rootScope.$on('identity-assigned', function () {
+                    chatService.join($location.path());
+                    deregisterIdentityAssigned();
+                });
+            }
 
             var deregisterLocationChange = $rootScope.$on('$locationChangeSuccess', function (evt, newUrl, oldUrl) {
                 chatService.leave(oldUrl.substring(oldUrl.indexOf('#') + 1));

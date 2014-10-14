@@ -5,9 +5,9 @@
         .module('app')
         .factory('chatService', chatService);
 
-    chatService.$inject = ['Hub', '$http'];
+    chatService.$inject = ['Hub', 'authentication', '$http'];
 
-    function chatService(Hub, $http) {
+    function chatService(Hub, auth, $http) {
 
         var hub = new Hub('chatHub', {
 
@@ -56,10 +56,10 @@
                 groupName = 'World';
             }
             try {
-                hub.joinRoom(groupName);
+                hub.joinRoom(groupName, auth.authentication.userName);
             }
             catch (e) {
-                reconnect(join, [groupName]);
+                reconnect(join, [groupName, auth.authentication.userName]);
             }
         }
 
@@ -68,10 +68,10 @@
                 groupName = 'World';
             }
             try {
-                hub.leaveRoom(groupName);
+                hub.leaveRoom(groupName, auth.authentication.userName);
             }
             catch (e) {
-                reconnect(leave, [groupName]);
+                reconnect(leave, [groupName, auth.authentication.userName]);
             }
         }
 

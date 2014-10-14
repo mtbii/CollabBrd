@@ -5,9 +5,9 @@
         .module('app')
         .factory('authentication', authentication);
 
-    authentication.$inject = ['$http', '$q', 'localStorageService', 'routes'];
+    authentication.$inject = ['$http', '$q', '$rootScope', 'localStorageService', 'routes'];
 
-    function authentication($http, $q, localStorageService, routes) {
+    function authentication($http, $q, $rootScope, localStorageService, routes) {
 
         var serviceBase = '/';
         var authServiceFactory = {};
@@ -47,6 +47,7 @@
                 _authentication.isAuth = true;
                 _authentication.userName = loginData.userName;
                 _authentication.role = "Member";
+                $rootScope.$broadcast('identity-assigned');
 
                 deferred.resolve(response);
 
@@ -76,6 +77,7 @@
                 _authentication.isAuth = true;
                 _authentication.userName = authData.userName;
                 _authentication.role = "Member";
+                $rootScope.$broadcast('identity-assigned');
             }
 
         }
@@ -83,6 +85,7 @@
         function _setGuestProfile(profile) {
             _authentication.role = "Guest";
             _authentication.userName = profile.DisplayName;
+            $rootScope.$broadcast('identity-assigned');
             localStorageService.set('guestData',
                 {
                     Id: profile.Id,
