@@ -6,7 +6,7 @@
         </div>-->
         <ul class="navi">
             <li ng-hide="!vm.user">
-                <h6>&nbsp;&nbsp;&nbsp;<i class="fa fa-user"></i>Hi, {{vm.user.userName}}</h6>
+                <h6 ng-hide="!vm.user.userName">&nbsp;&nbsp;&nbsp;<i class="fa fa-user"></i>Hi, {{vm.user.userName}}</h6>
                 <a ng-hide="!vm.user.isAuth" ng-click="vm.logout()">Logout</a>
             </li>
             <li ng-hide="vm.user.isAuth">

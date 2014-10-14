@@ -206,7 +206,6 @@
         var directive = {
             link: link,
             scope: {
-
             },
             templateUrl: '/app/layout/fabric-canvas.html',
             restrict: 'E',
@@ -215,7 +214,6 @@
         return directive;
 
         function setupCanvasService(canvas) {
-
             var sendTimeout;
             var canvasOnFn = function (options) {
                 if (sendTimeout) {
@@ -260,6 +258,7 @@
                 isDrawingMode: true
             });
 
+            canvas.loadFromDatalessJSON(attrs['scene']);
             setupCanvasService(canvas);
 
             fabric.Object.prototype.transparentCorners = false;

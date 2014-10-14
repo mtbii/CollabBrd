@@ -25,12 +25,14 @@ namespace CollabBrd.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IQueryable<Project> Projects()
         {
             return _repository.Projects;
         }
 
         [HttpGet]
+        [Authorize]
         public IQueryable<Scene> Scenes()
         {
             return _repository.Scenes;
@@ -43,6 +45,7 @@ namespace CollabBrd.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IQueryable<Profile> Profiles()
         {
             return Queryable.AsQueryable(_repository.Profiles);

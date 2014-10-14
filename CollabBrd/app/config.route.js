@@ -65,18 +65,18 @@
                     }
                 }
             },
-            {
-                url: '/dashboard',
-                authentication: true,
-                config: {
-                    templateUrl: '/app/dashboard/dashboard.html',
-                    title: 'dashboard',
-                    settings: {
-                        nav: 2,
-                        content: '<i class="fa fa-dashboard"></i> Dashboard'
-                    }
-                }
-            },
+            //{
+            //    url: '/dashboard',
+            //    authentication: true,
+            //    config: {
+            //        templateUrl: '/app/dashboard/dashboard.html',
+            //        title: 'dashboard',
+            //        settings: {
+            //            nav: 2,
+            //            content: '<i class="fa fa-dashboard"></i> Dashboard'
+            //        }
+            //    }
+            //},
             {
                 url: '/projects',
                 authentication: true,

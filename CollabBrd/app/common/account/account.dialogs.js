@@ -7,9 +7,9 @@
         .module('app')
         .controller(controllerId, login);
 
-    login.$inject = ['$scope', 'common'];
+    login.$inject = ['$scope', 'common', 'spinner'];
 
-    function login($scope, common) {
+    function login($scope, common, spinner) {
         var getLogFn = common.logger.getLogFn;
         var log = getLogFn(controllerId);
         var logError = getLogFn(controllerId, 'error');
@@ -27,11 +27,14 @@
         }
 
         $scope.loginUser = function () {
+            spinner.spinnerShow();
             common.auth.login($scope.vm).then(function () {
+                spinner.spinnerHide();
                 logSuccess("Successfully logged in.");
                 $scope.closeThisDialog(true);
             },
             function (error) {
+                spinner.spinnerHide();
                 logError('Username or password is incorrect.');
             })
         }
@@ -108,11 +111,14 @@
 
             $scope.vm.validation = { messages: [] };
 
+            spinner.spinnerShow();
+
             common.auth.register($scope.vm.registerVM).then(function (response) {
+                spinner.spinnerHide();
                 $scope.closeThisDialog($scope.vm)
             },
             function (error) {
-
+                spinner.spinnerHide();
                 $scope.vm.validation.messages = [];
 
                 if (error.status == 400) {
