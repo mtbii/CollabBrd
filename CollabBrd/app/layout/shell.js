@@ -26,7 +26,7 @@
         activate();
 
         function activate() {
-            logSuccess('Hot Towel Angular loaded!', null, true);
+            logSuccess('CollabBrd loaded!', null, true);
             common.activateController([], controllerId);
         }
 
@@ -48,7 +48,7 @@
         );
 
         $rootScope.$on(events.spinnerToggle,
-            function (data) { toggleSpinner(data.show); }
+            function (evt, data) { toggleSpinner(data.show); }
         );
     };
 })();
