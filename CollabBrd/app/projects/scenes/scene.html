@@ -1,6 +1,7 @@
 ﻿<section class="mainbar" data-ng-controller="scene as vm">
 
     <div class="widget-content user">
+    <button onclick="TogetherJS(this); return false;">Start Collaborating!</button>
         <data-cb-fabric-canvas scene="{{vm.scene.sceneJSON}}"></data-cb-fabric-canvas>
     </div>
     <data-cb-chat></data-cb-chat>
